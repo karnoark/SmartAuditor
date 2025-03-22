@@ -1,9 +1,13 @@
 {
   "name": "smartauditor-cli",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "main": "index.js",
   "bin": {
     "auditai": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karnoark/SmartAuditor/tree/dbeacaad609859e577c05850c9b3b779f7ff586d/smartauditor-cli"
   },
   "scripts": {
     "start": "node index.js",
