@@ -4,6 +4,7 @@ import CustomCodeEditor from "@/components/contract-input";
 import Header from "@/components/header";
 import ResultsModal from "@/components/results-modal";
 import { analyzeContract, AuditResults } from "@/utils/ai-prompt";
+import { analyzeContractGroq } from "@/utils/ai-prompt-groq";
 import { useState } from "react";
 
 export default function Home() {
@@ -15,7 +16,7 @@ export default function Home() {
   const analyze = async () => {
     setLoading(true);
     setIsModalOpen(true);
-    await analyzeContract(contract, setResults, setLoading);
+    await analyzeContractGroq(contract, setResults, setLoading);
   };
 
   return (

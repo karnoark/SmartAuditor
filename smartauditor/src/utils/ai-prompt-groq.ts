@@ -1,10 +1,10 @@
-import OpenAI from "openai";
+import Groq from "groq-sdk";
 import {
   ChatCompletionMessageParam,
   ChatCompletion,
   ChatCompletionTool,
-} from "openai/resources/chat/completions";
-import { ChatCompletionCreateParams } from "openai/src/resources.js";
+  ChatCompletionCreateParams,
+} from "groq-sdk/resources/chat/completions";
 
 // Define types for our audit report
 interface MetricScore {
@@ -32,14 +32,14 @@ export interface AuditResults {
 type SetResults = (results: AuditResults) => void;
 type SetLoading = (loading: boolean) => void;
 
-const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY;
 
-const openai = new OpenAI({
+const openai = new Groq({
   apiKey: apiKey,
   dangerouslyAllowBrowser: true,
 });
 
-export const analyzeContract = async (
+export const analyzeContractGroq = async (
   contract: string,
   setResults: SetResults,
   setLoading: SetLoading,
@@ -133,7 +133,7 @@ export const analyzeContract = async (
   ];
 
   const params: ChatCompletionCreateParams = {
-    model: "gpt-4o-mini",
+    model: "deepseek-r1-distill-llama-70b",
     messages,
     stream: false,
     tools,

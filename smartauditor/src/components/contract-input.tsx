@@ -95,7 +95,7 @@ const CustomCodeEditor: React.FC<CustomCodeEditorProps> = ({
             <button
               onClick={handleAnalyze}
               type="button"
-              className="flex flex-row items-center space-x-2 px-6 py-1.5 justify-center rounded-full text-white bg-blue-600 hover:bg-blue-500 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex flex-row items-center space-x-2 px-6 py-1.5 justify-center rounded-full text-white bg-green-600 hover:bg-green-500 focus:z-10 focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <span>Audit</span>
               <IconChecklist size={20} />

@@ -15,6 +15,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 import "react-circular-progressbar/dist/styles.css";
 import { AuditResults } from "@/utils/ai-prompt";
+import { BackgroundLines } from "./ui/background-lines";
 
 interface ResultsModalProps {
   isOpen: boolean;

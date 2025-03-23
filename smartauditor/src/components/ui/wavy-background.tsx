@@ -62,14 +62,20 @@ export const WavyBackground = ({
   };
 
   const waveColors = colors ?? [
-    "#38bdf8",
+    // "#38bdf8",
     // "#ed4312",
-    "#818cf8",
+    // "#818cf8",
     // "#c084fc",
     // "#00a800",
-    "#e879f9",
-    "#22d3ee",
-    "#000075"
+    // "#e879f9",
+    // "#22d3ee",
+    // "#000075"
+    "#0d381e",
+    "#164f2c",
+    "#1f693c",
+    "#2a834d",
+    "#349e5e",
+    "#26cc00",
   ];
   const drawWave = (n: number) => {
     nt += getSpeed();
@@ -108,7 +114,7 @@ export const WavyBackground = ({
     setIsSafari(
       typeof window !== "undefined" &&
         navigator.userAgent.includes("Safari") &&
-        !navigator.userAgent.includes("Chrome")
+        !navigator.userAgent.includes("Chrome"),
     );
   }, []);
 
@@ -116,7 +122,7 @@ export const WavyBackground = ({
     <div
       className={dn(
         "h-screen flex flex-col items-center justify-center",
-        containerClassName
+        containerClassName,
       )}
     >
       <canvas
