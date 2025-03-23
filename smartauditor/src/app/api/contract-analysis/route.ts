@@ -28,30 +28,99 @@ export interface AuditResults {
   }>;
 }
 
-// Define types for the state setter function
-type SetResults = (results: AuditResults) => void;
-type SetLoading = (loading: boolean) => void;
-
 const apiKey = process.env.GROQ_API_KEY;
 
-const openai = new Groq({
-  apiKey: apiKey,
-  dangerouslyAllowBrowser: true,
-});
-
-export const analyzeContractGroq = async (
-  contract: string,
-  setResults: SetResults,
-  setLoading: SetLoading,
-) => {
-  setLoading(true);
+export async function POST(request: Request) {
+  const { contract } = await request.json();
+  console.log(`Prompt=> \nAnalyze this smart contract: ${contract}`);
+  console.log("----------------------------");
+  //   const auditResults = {
+  //     auditReport:
+  //       "The provided smart contract is a Decentralized Voting system with multiple functionalities. It allows registration of voters, creation of proposals, voting, and execution of proposals. The contract uses modifiers to restrict certain functions to admins or registered voters. It also includes events for tracking important actions and functions to retrieve voting results and check voter participation.",
+  //     metricScores: [
+  //       {
+  //         metric: "Security",
+  //         score: 8,
+  //         explanation:
+  //           "The contract uses modifiers to restrict access and includes event emissions for transparency. However, there are no explicit reentrancy guards, which could be a security risk.",
+  //       },
+  //       {
+  //         metric: "Performance",
+  //         score: 9,
+  //         explanation:
+  //           "The contract is efficient with state variable usage and minimizes gas costs where possible, such as in bulk registration.",
+  //       },
+  //       {
+  //         metric: "Gas Efficiency",
+  //         score: 8,
+  //         explanation:
+  //           "The contract uses mappings and arrays efficiently, but some functions could benefit from further optimization to reduce gas consumption.",
+  //       },
+  //       {
+  //         metric: "Code Quality",
+  //         score: 9,
+  //         explanation:
+  //           "The code is well-structured, readable, and includes comprehensive comments and documentation.",
+  //       },
+  //       {
+  //         metric: "Documentation",
+  //         score: 8,
+  //         explanation:
+  //           "The contract includes NatSpec comments, but some functions could benefit from more detailed explanations.",
+  //       },
+  //       {
+  //         metric: "Other Key Areas",
+  //         score: 7,
+  //         explanation:
+  //           "The contract lacks some features like proposal expiration or advanced access control, which could enhance its functionality.",
+  //       },
+  //     ],
+  //     suggestionForImprovement: [
+  //       {
+  //         category: "Security",
+  //         priority: "Critical",
+  //         suggestion:
+  //           "Implement reentrancy guards to prevent potential reentrancy attacks.",
+  //       },
+  //       {
+  //         category: "Performance",
+  //         priority: "Medium",
+  //         suggestion:
+  //           "Optimize gas costs in functions with loops by using more efficient data structures or algorithms.",
+  //       },
+  //       {
+  //         category: "Code Quality",
+  //         priority: "Low",
+  //         suggestion:
+  //           "Consider adding more detailed comments for complex functions to improve readability.",
+  //       },
+  //       {
+  //         category: "Documentation",
+  //         priority: "Low",
+  //         suggestion:
+  //           "Enhance NatSpec comments with more detailed explanations for each function's purpose and behavior.",
+  //       },
+  //       {
+  //         category: "Other Key Areas",
+  //         priority: "High",
+  //         suggestion:
+  //           "Add functionality for proposal expiration to handle proposals that never reach a conclusion.",
+  //       },
+  //     ],
+  //   };
 
   try {
     if (!apiKey) {
       console.error("Groq API key is missing");
-      setLoading(false);
-      return;
+      return Response.json(
+        { error: "API key is not configured" },
+        { status: 500 },
+      );
     }
+
+    const openai = new Groq({
+      apiKey: apiKey,
+    });
 
     const messages: ChatCompletionMessageParam[] = [
       {
@@ -75,7 +144,7 @@ export const analyzeContractGroq = async (
               },
               metricScores: {
                 type: "array",
-                descirption:
+                description:
                   "An array containing exactly 6 specific metrics with scores from 0-10",
                 items: {
                   type: "object",
@@ -157,13 +226,16 @@ export const analyzeContractGroq = async (
     const toolCall = chatCompletion.choices[0].message.tool_calls?.[0];
 
     if (!toolCall) {
-      throw new Error("Expected function call in response but received none");
+      return Response.json(
+        { error: "No tool call found in the response" },
+        { status: 500 },
+      );
     }
-
-    console.log("toolCall", toolCall);
 
     // Parse the argument with proper type
     const auditResults: AuditResults = JSON.parse(toolCall.function.arguments);
+
+    console.log("auditResults", auditResults);
 
     // Ensure all required metrics are present and in the correct order
     const requiredMetrics = [
@@ -194,11 +266,9 @@ export const analyzeContractGroq = async (
       };
     });
 
-    // Set the results
-    setResults(auditResults);
-    setLoading(false);
-  } catch (err) {
-    console.error("Error analyzing contract:", err);
-    setLoading(false);
+    return Response.json({ results: auditResults });
+  } catch (error) {
+    console.log("Error analyzing contract: ", error);
+    return new Response("Failed to analyze the contract", { status: 500 });
   }
-};
+}

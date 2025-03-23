@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 import { Dialog } from "@headlessui/react";
 
@@ -39,6 +40,7 @@ const ResultsModal: React.FC<ResultsModalProps> = ({
       prevSection === section ? null : section,
     );
   };
+
   return (
     <Dialog
       open={isOpen}
