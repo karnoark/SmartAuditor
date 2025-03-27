@@ -32,8 +32,8 @@ const apiKey = process.env.GROQ_API_KEY;
 
 export async function POST(request: Request) {
   const { contract } = await request.json();
-  console.log(`Prompt=> \nAnalyze this smart contract: ${contract}`);
-  console.log("----------------------------");
+  //   console.log(`Prompt=> \nAnalyze this smart contract: ${contract}`);
+  //   console.log("----------------------------");
   //   const auditResults = {
   //     auditReport:
   //       "The provided smart contract is a Decentralized Voting system with multiple functionalities. It allows registration of voters, creation of proposals, voting, and execution of proposals. The contract uses modifiers to restrict certain functions to admins or registered voters. It also includes events for tracking important actions and functions to retrieve voting results and check voter participation.",
@@ -235,7 +235,7 @@ export async function POST(request: Request) {
     // Parse the argument with proper type
     const auditResults: AuditResults = JSON.parse(toolCall.function.arguments);
 
-    console.log("auditResults", auditResults);
+    // console.log("auditResults", auditResults);
 
     // Ensure all required metrics are present and in the correct order
     const requiredMetrics = [

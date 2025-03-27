@@ -11,7 +11,8 @@ import { IconChecklist, IconPaperclip } from "@tabler/icons-react";
 interface CustomCodeEditorProps {
   contract: string;
   setContract: React.Dispatch<React.SetStateAction<string>>;
-  analyze: () => Promise<void>;
+  //   analyze: () => Promise<void>;
+  analyze: () => void;
 }
 
 /**
